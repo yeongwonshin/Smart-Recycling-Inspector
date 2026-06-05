@@ -1,0 +1,35 @@
+services:
+  inspector-server:
+    build:
+      context: .
+      dockerfile: backend/cpp/Dockerfile
+    container_name: smart-recycling-inspector-server
+    ports:
+      - "50051:50051"
+    environment:
+      - OMP_NUM_THREADS=4
+
+  gateway:
+    build:
+      context: .
+      dockerfile: backend/gateway/Dockerfile
+    container_name: smart-recycling-gateway
+    depends_on:
+      - inspector-server
+    environment:
+      - GRPC_TARGET=inspector-server:50051
+      - PORT=8080
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: smart-recycling-frontend
+    depends_on:
+      - gateway
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    ports:
+      - "5173:5173"

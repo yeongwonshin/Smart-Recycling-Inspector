@@ -1,0 +1,11 @@
+flowchart TD
+    A[React Dashboard<br/>image upload + controls] -->|HTTP multipart/form-data| B[Node.js Gateway]
+    B -->|gRPC + Protocol Buffers| C[C++ gRPC Inspection Server]
+    C -->|function call| D[OpenMP SmartWasteInspector Engine]
+    D --> E[Parallel image decode]
+    D --> F[Parallel preprocessing]
+    D --> G[Feature extraction]
+    D --> H[AI category + contamination scoring]
+    H --> C
+    C --> B
+    B --> A
